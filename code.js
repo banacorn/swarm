@@ -80,9 +80,13 @@ var Ctx = (function(){
                 level: 0,
                 scalar: 50
         };
-        var scale = {
-                level: 0,
-                scalar: 50
+        var translation = {
+                x: 0,
+                y: 0,
+                top: 0,
+                left: 0,
+                dx: 0,
+                dy: 0
         };
         var germColor = {
                 blau: 'rgba(80, 160, 240, ',
@@ -148,7 +152,11 @@ var Ctx = (function(){
 		                scaling.level++;
 		        }
 		},
-		translate: function(type){
+		translate: function(e){
+		        translation.x += e.x;
+		        translation.y += e.y;
+		        translation.dx += e.x;
+		        translation.dy += e.y;
 		},
 		draw: function(){
 		
@@ -159,7 +167,11 @@ var Ctx = (function(){
 		        
 		                var germs = Germs.getGerms();
 		                
-		                ctx.clearRect(0, 0, viewport.width, viewport.height);
+		                ctx.clearRect(-translation.x, -translation.y, viewport.width, viewport.height);
+		                
+		                ctx.translate(translation.dx, translation.dy);
+		                translation.dx = 0;
+		                translation.dy = 0;
 		                
 		                for(var i=0, len=germs.length; i<len; i++)
 		                {
@@ -210,9 +222,22 @@ var DOM = (function(){
                 });
         }
         
-        var translate = function(){
+        var translate = function(f){
                 $('#canvas').mousedown(function(e){
-                        $(window).mousemove(function(){
+                        var o = { 
+                                top: e.pageY,
+                                left: e.pageX
+                        };
+                        
+                        $(window).mousemove(function(e){
+                                f({
+                                        x: e.pageX - o.left,
+                                        y: e.pageY - o.top,
+                                });
+                                o = {
+                                        top: e.pageY,
+                                        left: e.pageX                                
+                                };
                         });
                 }).mouseup(function(){
                         $(window).unbind('mousemove');
@@ -223,7 +248,7 @@ var DOM = (function(){
                 init: function(){
                         resize();
                         scale(Ctx.scale);
-                        translate();
+                        translate(Ctx.translate);
                 },
                 getViewportSize: function(){
                         return viewport;
