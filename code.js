@@ -78,11 +78,13 @@ var Ctx = (function(){
         var viewport;
         var scaling = {
                 level: 0,
-                scalar: 50
+                scalar: 100
         };
         var translation = {
-                x: 0,
-                y: 0,
+                x: function(){ return this.ax + this.left },
+                y: function(){ return this.ay + this.top },
+                ax: 0,
+                ay: 0,
                 top: 0,
                 left: 0,
                 dx: 0,
@@ -98,12 +100,12 @@ var Ctx = (function(){
                 ctx.strokeStyle = 'rgba(200, 200, 200, 0.5)';
                 ctx.lineWidth = 5;
                 ctx.beginPath();
-                ctx.arc(germ.x+300, germ.y+300, 30, 0, Math.PI*2, true);
+                ctx.arc(germ.x+translation.left, germ.y+translation.top, 30, 0, Math.PI*2, true);
                 ctx.stroke();
                 
                 ctx.beginPath();
                 ctx.fillStyle = germColor[germ.type] + (Math.sin(germ.phase*Math.PI/germ.cycle) * 0.5 + 0.2) + ')';
-                ctx.arc(germ.x+300, germ.y+300, 10, 0, Math.PI*2, true);
+                ctx.arc(germ.x+translation.left, germ.y+translation.top, 10, 0, Math.PI*2, true);
                 ctx.fill();
                 
                 ctx.restore();
@@ -135,10 +137,13 @@ var Ctx = (function(){
                                 ctx.font         = '20px Helvatica';
                                 ctx.textBaseline = 'middle';
                                 
-                                //vp
-                                viewport = DOM.getViewportSize();
 		        }
 		        
+		},
+		resize: function(v){
+		        viewport = v;
+		        translation.top = v.height/2;
+		        translation.left = v.width/2;
 		},
 		scale: function(type){
 		        if(type && scaling.level > 0)//zoom in
@@ -146,15 +151,15 @@ var Ctx = (function(){
 		                scaling.scalar *= 1.25;
 		                scaling.level--;
 		        }
-		        else if(!type && scaling.level < 7)
+		        else if(!type && scaling.level < 10)
 		        {
 		                scaling.scalar *= 0.8;
 		                scaling.level++;
 		        }
 		},
 		translate: function(e){
-		        translation.x += e.x;
-		        translation.y += e.y;
+		        translation.ax += e.x;
+		        translation.ay += e.y;
 		        translation.dx += e.x;
 		        translation.dy += e.y;
 		},
@@ -167,7 +172,7 @@ var Ctx = (function(){
 		        
 		                var germs = Germs.getGerms();
 		                
-		                ctx.clearRect(-translation.x, -translation.y, viewport.width, viewport.height);
+		                ctx.clearRect(-translation.ax, -translation.ay, viewport.width, viewport.height);
 		                
 		                ctx.translate(translation.dx, translation.dy);
 		                translation.dx = 0;
@@ -180,18 +185,18 @@ var Ctx = (function(){
 		                }
 		                
 		                ctx.save();
-		                for(var j=0; j<30; j++)
+		                for(var j=0; j<60; j++)
 		                {
-		                        for(var i=0, len=20; i<len; i++)
+		                        for(var i=0, len=30; i<len; i++)
 		                        {
 		                                ctx.translate(scaling.scalar * 2, 0);
 		                                beehive(scaling.scalar);		                        
 		                        }
-		                        ctx.translate(-41 * scaling.scalar, scaling.scalar * 0.6);
+		                        ctx.translate(-61 * scaling.scalar, scaling.scalar * 0.6);
                                 }
 		                ctx.restore();
 		                
-		        }, 20);  
+		        }, 2);  
 		        
 		}
         };
@@ -201,13 +206,13 @@ var Ctx = (function(){
 var DOM = (function(){
         var viewport;
         
-        var resize = function(){
+        var resize = function(f){
                 $(window).resize(function(){
                         viewport = {
                                 width: $(this).width(),
                                 height: $(this).height()                        
                         };
-                        
+                        f(viewport);
                         $('#viewport').width(viewport.width).height(viewport.height);
                         $('#canvas').attr('width', viewport.width).attr('height', viewport.height);
                 }).resize();
@@ -246,12 +251,9 @@ var DOM = (function(){
         
         return {
                 init: function(){
-                        resize();
+                        resize(Ctx.resize);
                         scale(Ctx.scale);
                         translate(Ctx.translate);
-                },
-                getViewportSize: function(){
-                        return viewport;
                 }
         };
 })();
