@@ -1,31 +1,19 @@
 var Germs = (function(){
 
         var germs = [{
-                type: 'blau',
                 x: 0,
                 y: 0,
-                life: 10,
-                cycle: 30,
+                type: 'prokaryote',
+                life: 50,
+                age: 0,
+                cycle: 20,
                 phase: 0,
         },{
-                type: 'gruen',
-                x: 1,
-                y: 1,
-                life: 5,
-                cycle: 50,
-                phase: 0,
-        },{
-                type: 'gruen',
-                x: 1,
-                y: 2,
-                life: 15,
-                cycle: 50,
-                phase: 0,
-        },{
-                type: 'blau',
                 x: 0,
                 y: 1,
-                life: 12,
+                type: 'eukaryote',
+                life: 25,
+                age: 0,
                 cycle: 50,
                 phase: 0,
         }];
@@ -33,7 +21,7 @@ var Germs = (function(){
         function updateGerms(){
 		for(var i=0, len=germs.length; i<len; i++)
 		{
-		        if(germs[i].life === 0)
+		        if(germs[i].age === germs[i].life)
 		        {
 		                germs.splice(i, 1);
 		                return;
@@ -44,7 +32,7 @@ var Germs = (function(){
                         if(germs[i].phase === germs[i].cycle)
                         {
                                 germs[i].phase = 0;
-                                germs[i].life--;
+                                germs[i].age++;
                         }
 		}                
         }

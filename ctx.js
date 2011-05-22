@@ -17,10 +17,6 @@ var Ctx = (function(){
                 dx: 0,
                 dy: 0
         };
-        var germColor = {
-                blau: 'rgba(80, 160, 240, ',
-                gruen: 'rgba(40, 160, 40, '
-        };
 
         var mapping = function(x, y){
                 var s = scaling.scalar;
@@ -31,25 +27,77 @@ var Ctx = (function(){
                         y: s * y * 1.72 + s * m * 0.86
                 }
         };
-
-        var drawGerm = function(germ){
         
+        var germColor = {
+                blau: 'rgba(80, 160, 240, ',
+                gruen: 'rgba(40, 160, 40, '
+        };
+
+        var drawCircle = function(pos, rad, width, style, start, end, anticounter){                
+                ctx.strokeStyle = style || 'rgba(200, 200, 200, 0.5)';
+                ctx.lineWidth = scaling.scalar * width;
+                
+                ctx.beginPath();
+                ctx.arc(pos.x+translation.left, pos.y+translation.top, scaling.scalar * rad, start * Math.PI * 2 + Math.PI * -0.5 || Math.PI * -0.5, end * Math.PI * 2 + Math.PI * -0.5 || Math.PI * 1.5, anticounter || false);
+                ctx.stroke();
+        };
+
+        /* Organalle functions */
+        
+        var cellMembrane = function(pos){
+                drawCircle(pos, 0.8, 0.05);
+        };
+
+        var nuclearEnvelope = function(pos){
+                drawCircle(pos, 0.4, 0.05);
+        };
+        
+        var phaseRing = function(pos, phase){
+                drawCircle(pos, 0.3, 0.05, 'rgba(200, 200, 240, 0.5)', 0, phase);
+        };
+        
+        var ageRing = function(pos, age){
+                drawCircle(pos, 0.2, 0.05, 'rgba(200, 160, 160, 0.5)', age);
+        };
+        
+        var drawGerm = function(germ, level){
+                
+                /* level 
+                0~3 
+                4~7 
+                8~10                
+                */
                 var s = scaling.scalar;
                 var pos = mapping(germ.x, germ.y);
         
-                ctx.save();
-                ctx.strokeStyle = 'rgba(200, 200, 200, 0.5)';
-                ctx.lineWidth = s / 20;
-                ctx.beginPath();
-                ctx.arc(pos.x+translation.left, pos.y+translation.top, s * 0.7, 0, Math.PI*2, true);
-                ctx.stroke();
                 
-                ctx.beginPath();
-                ctx.fillStyle = germColor[germ.type] + (Math.sin(germ.phase*Math.PI/germ.cycle) * 0.5 + 0.2) + ')';
-                ctx.arc(pos.x+translation.left, pos.y+translation.top, s * 0.3, 0, Math.PI*2, true);
-                ctx.fill();
+                ctx.save();
+                
+                //scaling.level
+                if(level <= 3)
+                {
+                        //cell membrane
+                        cellMembrane(pos);
+                        
+                        
+                        //nucleus
+                        if(germ.type === 'eukaryote')
+                        {
+                                nuclearEnvelope(pos);
+                        }
+                        
+                        phaseRing(pos, germ.phase/germ.cycle);
+                        ageRing(pos, germ.age/germ.life);
+                }
+                else if(level <= 7)
+                {
+                }
+                else
+                {
+                }
                 
                 ctx.restore();
+                
         };
 
         var beehive = function(s){                        
@@ -121,10 +169,10 @@ var Ctx = (function(){
 		                
 		                for(var i=0, len=germs.length; i<len; i++)
 		                {
-		                        drawGerm(germs[i]);		                        
+		                        drawGerm(germs[i], scaling.level);		                        
 		                }
 		                
-		                ctx.save();
+		                /*ctx.save();
 		                
 		                ctx.translate(translation.left, translation.top);
 		                for(var j=0; j<20; j++)
@@ -136,14 +184,14 @@ var Ctx = (function(){
 		                        }
 		                        ctx.translate(-91.5 * scaling.scalar, scaling.scalar * 0.86);
                                 }
-		                ctx.restore();
+		                ctx.restore();*/
 		                
-                                ctx.strokeStyle = 'rgb(100, 100, 100)';
+                                /*ctx.strokeStyle = 'rgb(100, 100, 100)';
                                 ctx.lineWidth = 5;
                                 ctx.beginPath();
                                 ctx.moveTo(translation.left, translation.top);
                                 ctx.lineTo(translation.left, translation.top + 1 * scaling.scalar);
-                                ctx.stroke();
+                                ctx.stroke();*/
 		        }, 20);
 		}
         };
