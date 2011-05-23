@@ -26,9 +26,9 @@ var DOM = (function(){
         var scale = function(f){
                 $(window).mousewheel(function(e, delta){
                         if(delta === 1)//zoom in
-                                f(true);
+                                f(true, e);
                         else if(delta === -1)//zoom out
-                                f(false);
+                                f(false, e);
                 });
         }
         
