@@ -6,7 +6,7 @@ var Germs = (function(){
                 type: 'prokaryote',
                 life: 3,
                 age: 0,
-                cycle: 3000,
+                cycle: 300,
                 phase: 0,
         },{
                 x: 1,
@@ -22,7 +22,7 @@ var Germs = (function(){
                 type: 'eukaryote',
                 life: 4,
                 age: 0,
-                cycle: 2000,
+                cycle: 200,
                 phase: 0,
         }];
 

@@ -36,15 +36,6 @@ var Petri = (function(){
         });
         return {
                 iter: iter,
-                iterCorner: function(func){
-                        var d = level%2;
-                        func(level, (level-d)/2);
-                        func(level, (-level-d)/2);
-                        func(0, -level);
-                        func(-level, (-level-d)/2);
-                        func(-level, (level-d)/2);
-                        func(0, level);
-                },
                 getLevel: function(){
                         return level;
                 }
