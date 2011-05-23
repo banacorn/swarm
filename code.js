@@ -3,6 +3,7 @@ $(function(){
         DOM.init();
         Ctx.init();
         Ctx.draw();
+        
 });
 
 
