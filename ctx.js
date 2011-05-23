@@ -74,85 +74,6 @@ var Ctx = (function(){
         
         //Germs
         G = {
-                draw: function(germ){
-                        var s = VP.scale;
-                        var lvl = VP.level;
-                        var pos = mapping(germ.x, germ.y);
-                
-                        ctx.save();
-                
-                        //scaling.level
-                        if(lvl <= 2)
-                        {
-                                this.drawSurface(pos, 160);
-                                //cell membrane
-                                this.cellMembrane(pos);
-                                
-                                
-                                //nucleus
-                                if(germ.type === 'eukaryote')
-                                {
-                                        this.nuclearEnvelope(pos);
-                                }
-                                
-                                this.phaseRing(pos, germ.phase/germ.cycle);
-                                this.ageRing(pos, germ.age/germ.life);
-                        }
-                        else if(lvl <= 5)
-                        {
-                                //cell membrane
-                                this.drawSurface(pos, 80);
-                                this.drawSurface(pos, 160);
-                        }
-                        else
-                        {
-                                //cell membrane
-                                this.drawSurface(pos, 160);
-                        }
-                
-                        ctx.restore();
-                },
-                drawCircle: function(pos, rad, width, style, start, end, anticounter){             
-                        ctx.strokeStyle = style || 'rgba(200, 200, 200, 0.5)';
-                        ctx.lineWidth = VP.scale * width;                
-                        ctx.beginPath();
-                        ctx.arc(
-                                pos.x, 
-                                pos.y, 
-                                VP.scale * rad, 
-                                start * Math.PI * 2 + Math.PI * -0.5 || Math.PI * -0.5, 
-                                end * Math.PI * 2 + Math.PI * -0.5 || Math.PI * 1.5,
-                                false
-                        );
-                        ctx.stroke();
-                },
-                drawSurface: function(pos, rad){
-                        var radgrad = ctx.createRadialGradient(pos.x,pos.y,VP.scale * rad * 0.1,pos.x,pos.y,VP.scale * rad * 0.5);
-                        radgrad.addColorStop(0, 'rgba(80, 160, 240, 0.1)');
-                        radgrad.addColorStop(0.9, 'rgba(80, 160, 240, 0.2)');
- 
-                        ctx.fillStyle = radgrad;
-                             
-                        ctx.beginPath();
-                        ctx.arc(
-                                pos.x, 
-                                pos.y, 
-                                VP.scale * rad, 0, Math.PI*2, false
-                        );
-                        ctx.fill();
-                },
-                cellMembrane: function(pos){
-                        this.drawCircle(pos, 160, 10);
-                },
-                nuclearEnvelope: function(pos){
-                        this.drawCircle(pos, 80, 10);
-                },
-                phaseRing: function(pos, phase){
-                        this.drawCircle(pos, 60, 10, 'rgba(200, 200, 240, 0.5)', 0, phase);
-                },
-                ageRing: function(pos, age){
-                        this.drawCircle(pos, 40, 10, 'rgba(200, 160, 160, 0.5)', age);
-                }
         };
         
         //Utilities
@@ -186,6 +107,8 @@ var Ctx = (function(){
                                 ctx = canvas.getContext('2d');
                                 ctx.font         = '20px Helvatica';
                                 ctx.textBaseline = 'middle';
+                                
+                                Ctxgerm.init(ctx);
 		        }
 		        
 		},
@@ -204,9 +127,11 @@ var Ctx = (function(){
 		                
 		                P.drawBorder();
 		                
+		                Ctxgerm.update(VP.scale, VP.level);
+		                
 		                for(var i=0,len=germs.length; i<len; i++)
 		                {
-                                        G.draw(germs[i]);
+                                        Ctxgerm.draw(germs[i]);
 		                }
 		                
 		                

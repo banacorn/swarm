@@ -1,9 +1,7 @@
 $(function(){
-
         DOM.init();
         Ctx.init();
-        Ctx.draw();
-        
+        Ctx.draw();        
 });
 
 
