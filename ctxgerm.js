@@ -66,8 +66,8 @@ var Ctxgerm = (function(){
                 
                         if(lvl <= 2)
                         {       
-                                //drawSurface(pos, 160);//cytoplasm
-                                ctx.drawImage(cytoplasm_image, pos.x-160*scale, pos.y-160*scale, 320*scale, 320*scale);
+                                drawSurface(pos, 160);//cytoplasm
+                                //ctx.drawImage(cytoplasm_image, pos.x-160*scale, pos.y-160*scale, 320*scale, 320*scale);
                                 
                                 drawCircle(pos, 20, {
                                         style: 'rgba(40, 160, 40, 0.2)',

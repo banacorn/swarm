@@ -71,11 +71,6 @@ var Ctx = (function(){
 		        ctx.restore();
                 }
         };
-        
-        //Germs
-        G = {
-        };
-        
         //Utilities
         
         function mapping(x, y){
