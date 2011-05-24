@@ -2,6 +2,7 @@ var Ctxgerm = (function(){
         var ctx;
         var scale, level;
         
+        
         function drawSurface(pos, rad){
                 var radgrad = ctx.createRadialGradient(pos.x,pos.y,VP.scale * rad * 0.1,pos.x,pos.y,VP.scale * rad * 1);
                 radgrad.addColorStop(0.5, 'rgba(80, 160, 240, 0.05)');
