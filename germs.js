@@ -4,7 +4,7 @@ var Germs = (function(){
                 x: 0,
                 y: 1,
                 type: 'prokaryote',
-                life: 3,
+                life: 10,
                 age: 0,
                 cycle: 300,
                 phase: 0,
@@ -20,13 +20,40 @@ var Germs = (function(){
                 x: 1,
                 y: 1,
                 type: 'eukaryote',
-                life: 4,
+                life: 8,
                 age: 0,
-                cycle: 200,
+                cycle: 100,
+                phase: 0,
+        },{
+                x: 0,
+                y: 0,
+                type: 'eukaryote',
+                life: 6,
+                age: 0,
+                cycle: 500,
+                phase: 0,
+        },{
+                x: 2,
+                y: 1,
+                type: 'prokaryote',
+                life: 10,
+                age: 0,
+                cycle: 60,
+                phase: 0,
+        },{
+                x: 1,
+                y: 2,
+                type: 'eukaryote',
+                life: 7,
+                age: 0,
+                cycle: 250,
                 phase: 0,
         }];
 
-
+        for(var i=0,len=germs.length; i<len; i++)
+        {
+                //Petri.register(germs[i]);
+        }
 
         function updateGerms(){
         
@@ -75,15 +102,11 @@ var Germs = (function(){
         /* CLOCK */
         setInterval(function(){
                 updateGerms();
-        }, 20);
+        }, 100);
         
         return {
                 getGerms: function(){
                         return germs;
-                },
-                test: function(x, y, n){
-		        var a = getNest(x,y, n);
-		        return a.x + '   ' + a.y;
                 }
         };
 })();
