@@ -2,8 +2,6 @@ var Ctxgerm = (function(){
         var ctx;
         var scale, level;
         
-        
-        
         function drawSurface(pos, rad){
                 var radgrad = ctx.createRadialGradient(pos.x,pos.y,VP.scale * rad * 0.1,pos.x,pos.y,VP.scale * rad * 1);
                 radgrad.addColorStop(0.5, 'rgba(80, 160, 240, 0.05)');
@@ -67,7 +65,8 @@ var Ctxgerm = (function(){
                 
                         if(lvl <= 2)
                         {       
-                                drawSurface(pos, 160);//cytoplasm
+                                //drawSurface(pos, 160);//cytoplasm
+                                ctx.drawImage(cytoplasm_image, pos.x-160*scale, pos.y-160*scale, 320*scale, 320*scale);
                                 
                                 drawCircle(pos, 20, {
                                         style: 'rgba(40, 160, 40, 0.2)',
@@ -91,6 +90,12 @@ var Ctxgerm = (function(){
                         }
                         else if(lvl <= 5)
                         {
+                                //nucleus
+                                if(germ.type === 'eukaryote')
+                                {
+                                        drawSurface(pos, 80);//nucleus
+                                        //drawCircle(pos, 80, { width:5 });//nuclear envelope
+                                }
                                 drawSurface(pos, 160);
                         }
                         else

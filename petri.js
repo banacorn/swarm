@@ -38,7 +38,20 @@ var Petri = (function(){
                 iter: iter,
                 getLevel: function(){
                         return level;
-                }
+                }/*,
+                register: function(germ){
+                        dish(germ.x, germ.y, function(x, y){
+                                petri[x][y].germ = germ;
+                        });
+                },
+                unregister: function(){
+                
+                },
+                test: function(x, y){
+                        dish(x, y, function(_x, _y){
+                                console.log(petri[_x][_y].germ);
+                        });
+                }*/
         };
 
 })();

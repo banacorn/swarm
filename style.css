@@ -5,3 +5,26 @@
         overflow: hidden;
 }
 
+#sprite
+{
+        display: none;
+}
+
+
+#github
+{
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        
+        padding: 10px;
+        margin: 20px;
+        
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 5px;
+}
+
+a
+{
+        color: white;
+}
