@@ -80,6 +80,7 @@ var Germs = (function(){
                 updateGerms();
         }, 50);
         
+        
         return {
                 getGerms: function(){
                         return germs;
