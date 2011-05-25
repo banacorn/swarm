@@ -48,23 +48,23 @@ var Ctx = (function(){
                 
                         var level = Petri.getLevel();
                         var d = level%2;
-                        var pos = mapping(1, level+1);
+                        var pos = mapping(1, level);
                         
                         ctx.beginPath();
 		        ctx.moveTo(pos.x, pos.y);		
-                        var pos = mapping(level+1, (level-d)/2+1);                
+                        var pos = mapping(level+1, (level+d)/2);                
 	                ctx.lineTo(pos.x, pos.y);	        
-                        var pos = mapping(level+1, -(level-d)/2);
+                        var pos = mapping(level+1, -(level-d)/2-1);
 	                ctx.lineTo(pos.x, pos.y);	        
                         var pos = mapping(0, -level-1);
 	                ctx.lineTo(pos.x, pos.y);	        
                         var pos = mapping(-level-1, -(level-d)/2-1);
 	                ctx.lineTo(pos.x, pos.y);	        
-                        var pos = mapping(-level-1, (level-d)/2);                
+                        var pos = mapping(-level-1, (level+d)/2);                
 	                ctx.lineTo(pos.x, pos.y);	        
                         var pos = mapping(0, level+1);                
 	                ctx.lineTo(pos.x, pos.y);	        
-                        var pos = mapping(1, level+1);            
+                        var pos = mapping(1, level);            
 	                ctx.lineTo(pos.x, pos.y);
                         ctx.stroke();
 
@@ -72,13 +72,12 @@ var Ctx = (function(){
                 }
         };
         //Utilities
-        
         function mapping(x, y){
                 var s = VP.scale;
-                var m = x % 2;
+                var m = Math.abs(x%2);
                 return {
                         x: s * x * 300,
-                        y: s * -y * 344 + s * m * 172
+                        y: s * -y * 344 - s * m * 172
                 }
         }
         
@@ -122,14 +121,13 @@ var Ctx = (function(){
 		                
 		                P.drawBorder();
 		                
-		                Ctxgerm.update(VP.scale, VP.level);
 		                
 		                for(var i=0,len=germs.length; i<len; i++)
 		                {
-                                        Ctxgerm.draw(germs[i]);
+		                        var pos = mapping(germs[i].x, germs[i].y);
+		                        if(visible(pos, 160))
+                                                Ctxgerm.draw(germs[i]);
 		                }
-		                
-		                
 		                
 		                
 		                
@@ -165,6 +163,8 @@ var Ctx = (function(){
 		                VP.translation.ax += d.x * 0.33;
 		                VP.translation.ay += d.y * 0.33;
 		        }
+		              
+		        Ctxgerm.update(VP.scale, VP.level);
 		},
 		translate: function(e){
 		        VP.translation.ax += e.x;

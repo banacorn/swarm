@@ -1,10 +1,15 @@
 var Ctxgerm = (function(){
         var ctx;
-        var scale, level;
+        var spr;
+        var cache = {
+                sur: {},
+                cir: {}
+        };
+        var scale = 1, level = 0;
         
         
         function drawSurface(pos, rad){
-                var radgrad = ctx.createRadialGradient(pos.x,pos.y,VP.scale * rad * 0.1,pos.x,pos.y,VP.scale * rad * 1);
+                var radgrad = ctx.createRadialGradient(pos.x,pos.y, scale * rad * 0.1, pos.x, pos.y, scale * rad * 1);
                 radgrad.addColorStop(0.5, 'rgba(80, 160, 240, 0.05)');
                 radgrad.addColorStop(1, 'rgba(80, 160, 240, 0.15)');
 
@@ -42,32 +47,34 @@ var Ctxgerm = (function(){
         }
         
         function mapping(x, y){
-                var m = x % 2;
+                var m = Math.abs(x%2);
                 return {
                         x: scale * x * 300,
-                        y: scale * -y * 344 + scale * m * 172
+                        y: scale * -y * 344 - scale * m * 172
                 }
         }
         
         return {
                 init: function(_ctx){
-                        ctx = _ctx;
+                        ctx = _ctx; 
+                        spr = document.querySelector('#sprite');
                 },
                 update: function(_scale, _level){
                         scale = _scale;
                         level = _level;
                 },
                 draw: function(germ){
-                        var s = VP.scale;
-                        var lvl = VP.level;
                         var pos = mapping(germ.x, germ.y);
                 
                         ctx.save();
                 
-                        if(lvl <= 2)
+                        if(level <= 2)
                         {       
-                                drawSurface(pos, 160);//cytoplasm
-                                //ctx.drawImage(cytoplasm_image, pos.x-160*scale, pos.y-160*scale, 320*scale, 320*scale);
+                                
+                                //cytoplasm                                
+                                if(cache.sur['160'] === undefined)
+                                        cache.sur['160'] = Spr.drawSurface(160);
+                                ctx.drawImage(spr, 0, 0, 320, 320, pos.x-160*scale, pos.y-160*scale, 320*scale, 320*scale);
                                 
                                 drawCircle(pos, 20, {
                                         style: 'rgba(40, 160, 40, 0.2)',
@@ -84,24 +91,30 @@ var Ctxgerm = (function(){
                                 
                                 //nucleus
                                 if(germ.type === 'eukaryote')
-                                {
-                                        drawSurface(pos, 80);//nucleus
-                                        //drawCircle(pos, 80, { width:5 });//nuclear envelope
+                                {                      
+                                        if(cache.sur['160'] === undefined)
+                                                cache.sur['160'] = Spr.drawSurface(80);
+                                        ctx.drawImage(spr, 0, 0, 320, 320, pos.x-80*scale, pos.y-80*scale, 160*scale, 160*scale);
                                 }
                         }
-                        else if(lvl <= 5)
+                        else if(level <= 5)
                         {
                                 //nucleus
                                 if(germ.type === 'eukaryote')
                                 {
-                                        drawSurface(pos, 80);//nucleus
-                                        //drawCircle(pos, 80, { width:5 });//nuclear envelope
+                                        if(cache.sur['160'] === undefined)
+                                                cache.sur['160'] = Spr.drawSurface(80);
+                                        ctx.drawImage(spr, 0, 0, 320, 320, pos.x-80*scale, pos.y-80*scale, 160*scale, 160*scale);
                                 }
-                                drawSurface(pos, 160);
+                                if(cache.sur['160'] === undefined)
+                                        cache.sur['160'] = Spr.drawSurface(160);
+                                ctx.drawImage(spr, 0, 0, 320, 320, pos.x-160*scale, pos.y-160*scale, 320*scale, 320*scale);
                         }
                         else
                         {
-                                drawSurface(pos, 160);
+                                if(cache.sur['160'] === undefined)
+                                        cache.sur['160'] = Spr.drawSurface(160);
+                                ctx.drawImage(spr, 0, 0, 320, 320, pos.x-160*scale, pos.y-160*scale, 320*scale, 320*scale);
                         }
                 
                         ctx.restore();
