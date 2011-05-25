@@ -1,6 +1,7 @@
 $(function(){
         DOM.init();
         Ctx.init();
+        Spr.init();
         Ctx.draw();        
 });
 
