@@ -7,6 +7,7 @@ var Ctxgerm = (function(){
         };
         var scale = 1, level = 0;
         
+        
         function drawSurface(pos, rad){
                 var radgrad = ctx.createRadialGradient(pos.x,pos.y, scale * rad * 0.1, pos.x, pos.y, scale * rad * 1);
                 radgrad.addColorStop(0.5, 'rgba(80, 160, 240, 0.05)');
@@ -69,16 +70,11 @@ var Ctxgerm = (function(){
                 
                         if(level <= 2)
                         {       
-<<<<<<< HEAD
-                                drawSurface(pos, 160);//cytoplasm
-                                //ctx.drawImage(cytoplasm_image, pos.x-160*scale, pos.y-160*scale, 320*scale, 320*scale);
-=======
                                 
                                 //cytoplasm                                
                                 if(cache.sur['160'] === undefined)
                                         cache.sur['160'] = Spr.drawSurface(160);
                                 ctx.drawImage(spr, 0, 0, 320, 320, pos.x-160*scale, pos.y-160*scale, 320*scale, 320*scale);
->>>>>>> new-branch
                                 
                                 drawCircle(pos, 20, {
                                         style: 'rgba(40, 160, 40, 0.2)',
@@ -106,12 +102,6 @@ var Ctxgerm = (function(){
                                 //nucleus
                                 if(germ.type === 'eukaryote')
                                 {
-<<<<<<< HEAD
-                                        drawSurface(pos, 80);//nucleus
-                                        //drawCircle(pos, 80, { width:5 });//nuclear envelope
-                                }
-                                drawSurface(pos, 160);
-=======
                                         if(cache.sur['160'] === undefined)
                                                 cache.sur['160'] = Spr.drawSurface(80);
                                         ctx.drawImage(spr, 0, 0, 320, 320, pos.x-80*scale, pos.y-80*scale, 160*scale, 160*scale);
@@ -119,7 +109,6 @@ var Ctxgerm = (function(){
                                 if(cache.sur['160'] === undefined)
                                         cache.sur['160'] = Spr.drawSurface(160);
                                 ctx.drawImage(spr, 0, 0, 320, 320, pos.x-160*scale, pos.y-160*scale, 320*scale, 320*scale);
->>>>>>> new-branch
                         }
                         else
                         {
