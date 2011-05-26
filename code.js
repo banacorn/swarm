@@ -16,7 +16,7 @@ var DOM = (function(){
                         viewport = {
                                 width: $(this).width(),
                                 height: $(this).height()                        
-                        };
+                        }; 
                         f(viewport);
                         $('#viewport').width(viewport.width).height(viewport.height);
                         $('#canvas').attr('width', viewport.width).attr('height', viewport.height);
